@@ -1,5 +1,5 @@
 import Mapbox, { Camera, Images, LocationPuck, MapView, ShapeSource, SymbolLayer } from '@rnmapbox/maps';
-import { StyleURL } from '@rnmapbox/maps/lib/typescript/src/RNMBXModule';
+
 import { featureCollection, point } from '@turf/turf';
 import pin from '../assets/pin.png';
 import scooters from '../app/data/scooters.json';
@@ -15,7 +15,7 @@ export default function Map() {
 
   return (
     <MapView style={{flex:1}} styleURL="mapbox://styles/mapbox/dark-v11">
-      <Camera followZoomLevel={10} followUserLocation/>
+      <Camera followZoomLevel={16} followUserLocation/>
       <LocationPuck puckBearingEnabled puckBearing='heading' pulsing={{ isEnabled: true}}/>
         <Images images={{ pin }}/>
       <ShapeSource 
