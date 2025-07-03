@@ -9,7 +9,7 @@ import { ScreenContent } from '~/components/ScreenContent';
 export default function Home() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Home' }} />
+      <Stack.Screen options={{ title: 'Home'}} />
        <View style={{ flex: 1 }}> {/* Give the parent explicit flex:1 */}
           <Map/>
       </View>
