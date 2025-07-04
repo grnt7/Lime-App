@@ -101,8 +101,8 @@ export default function ScooterProvider({ children }: PropsWithChildren) {
             direction,
             setDirection, // Exposing setDirection in context for completeness, though Map.tsx won't use it directly for route now
             directionCoordinates: direction?.routes?.[0]?.geometry.coordinates || null,
-            routeTime: direction?.routes?.[0]?.duration || null,
-            routeDistance: direction?.routes?.[0]?.distance || null,
+            duration: direction?.routes?.[0]?.duration || null,
+            distance: direction?.routes?.[0]?.distance || null,
         }}>
             {children}
         </ScooterContext.Provider>

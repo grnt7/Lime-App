@@ -18,11 +18,12 @@ Button.displayName = 'Button';
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#6366F1',
+    backgroundColor: '#42E100',
     borderRadius: 24,
     elevation: 5,
     flexDirection: 'row',
     justifyContent: 'center',
+    width: '100%',
     padding: 16,
     shadowColor: '#000',
     shadowOffset: {
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     textAlign: 'center',
   },
 });
