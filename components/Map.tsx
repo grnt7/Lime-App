@@ -6,11 +6,33 @@ import locationicon from '../assets/location-icon.png';
 import scooters from '../app/data/scooters.json';
 //import routeResponse from '../app/data/route.json';
 import { useEffect, useState } from 'react';
-import { OnPressEvent } from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+//import { OnPressEvent } from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import * as Location from 'expo-location'; // Add this import
+import{ useScooter} from '../providers/ScooterProvider'; // Import the scooter context
+
+type MapboxTouchEvent = Mapbox.MapboxTouchEvent;
+// --- END OF LINE TO ADD ---
+
+
+// --- NEW: Define interfaces for the expected structure of your direction data ---
+interface RouteGeometry {
+  coordinates: number[][]; // Array of [longitude, latitude] pairs
+  type: 'LineString';
+}
+
+interface Route {
+  geometry: RouteGeometry;
+}
+
+interface DirectionResponse {
+  routes: Route[];
+}
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN || '');
 export default function Map() {
+
+  
+
 
   useEffect(() => {
   (async () => {
@@ -25,45 +47,29 @@ export default function Map() {
   })();
 }, []);
   
-  const [direction, setDirection] = useState();
-  const points = scooters.map(scooter => point ([scooter.long, scooter.lat]));
-   
-  
+  //const [direction, setDirection] = useState();//gemini change
+  const points = scooters.map(scooter => point ([scooter.long, scooter.lat],{ scooter }));
+    //console.log("MAP: Route Time from Context:", routeTime); 
+// Log route time from context
+  const { setSelectedScooter,directionCoordinates, routeTime, routeDistance  } = useScooter(); // Use the scooter context to get selected scooter
+  console.log("Time: ", routeTime);
+  console.log("Distance: ", routeDistance);
+
+
  const startLocationCoordinates = [2.1734, 41.3851]; // Example coordinates for Barcelona
 const startPointFeature = point(startLocationCoordinates, { title: 'Start Location' });
 
-  //const directionCoordinate = direction?.routes?.[0].geometry.coordinates;
-const directionCoordinate = direction?.routes[0]?.geometry.coordinates;
-
-
-  /*const onPointPress = async (event: OnPressEvent) => {
-    
-   const newDirection = await getDirections(
-    [2.1734, 41.3851],
-    [event.coordinates.longitude, event.coordinates.latitude]);
-    
-   
-   setDirection(newDirection);
+ 
+const onPointPress = async (event: MapboxTouchEvent) => {
+  console.log(JSON.stringify(event, null, 2));
+  if (event.features[0].properties?.scooter) {
+     setSelectedScooter(event.features[0].properties.scooter); // Set the selected scooter in the context
   }
+}
+  
+   /*
+ try block//
 */
-const onPointPress = async (event: OnPressEvent) => {
-  try {
-    // Get user's current location each time a scooter is clicked
-    const myLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-
-    const from = [myLocation.coords.longitude, myLocation.coords.latitude];
-    const to = [event.coordinates.longitude, event.coordinates.latitude];
-
-    console.log('FROM (user location):', from);
-    console.log('TO (scooter):', to);
-
-    const newDirection = await getDirections(from, to);
-    setDirection(newDirection);
-  } catch (error) {
-    console.error('Error getting location or directions:', error);
-  }
-};
-
   return (
     <MapView style={{flex:1}} styleURL="mapbox://styles/mapbox/dark-v11">
       <Camera followZoomLevel={16} followUserLocation
@@ -134,7 +140,7 @@ const onPointPress = async (event: OnPressEvent) => {
         />
     
       </ShapeSource>
-      {directionCoordinate && (
+      {directionCoordinates && (
   <ShapeSource
     id="routeSource"
     lineMetrics
@@ -143,7 +149,7 @@ const onPointPress = async (event: OnPressEvent) => {
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates: directionCoordinate,
+        coordinates: directionCoordinates,
       },
     }}>
     <LineLayer
@@ -158,7 +164,5 @@ const onPointPress = async (event: OnPressEvent) => {
   </ShapeSource>
 )}
       </MapView>
-    
   );
 }
-
