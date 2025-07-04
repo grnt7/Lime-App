@@ -4,13 +4,26 @@ import { featureCollection, point } from '@turf/turf';
 import pin from '../assets/pin.png';
 import locationicon from '../assets/location-icon.png';
 import scooters from '../app/data/scooters.json';
-import routeResponse from '../app/data/route.json';
-import { useState } from 'react';
+//import routeResponse from '../app/data/route.json';
+import { useEffect, useState } from 'react';
 import { OnPressEvent } from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
-
+import * as Location from 'expo-location'; // Add this import
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN || '');
 export default function Map() {
+
+  useEffect(() => {
+  (async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.error('Permission to access location was denied');
+      // You might want to show an alert to the user here
+      return;
+    }
+    // Optionally, get initial location here if you want to center the map on user
+    // without waiting for a scooter click.
+  })();
+}, []);
   
   const [direction, setDirection] = useState();
   const points = scooters.map(scooter => point ([scooter.long, scooter.lat]));
@@ -23,14 +36,33 @@ const startPointFeature = point(startLocationCoordinates, { title: 'Start Locati
 const directionCoordinate = direction?.routes[0]?.geometry.coordinates;
 
 
-  const onPointPress = async (event: OnPressEvent) => {
+  /*const onPointPress = async (event: OnPressEvent) => {
     
-   const newDirection = await getDirections([2.1734, 41.3851],[event.coordinates.longitude, event.coordinates.latitude]);
+   const newDirection = await getDirections(
+    [2.1734, 41.3851],
+    [event.coordinates.longitude, event.coordinates.latitude]);
     
    
    setDirection(newDirection);
   }
+*/
+const onPointPress = async (event: OnPressEvent) => {
+  try {
+    // Get user's current location each time a scooter is clicked
+    const myLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
 
+    const from = [myLocation.coords.longitude, myLocation.coords.latitude];
+    const to = [event.coordinates.longitude, event.coordinates.latitude];
+
+    console.log('FROM (user location):', from);
+    console.log('TO (scooter):', to);
+
+    const newDirection = await getDirections(from, to);
+    setDirection(newDirection);
+  } catch (error) {
+    console.error('Error getting location or directions:', error);
+  }
+};
 
   return (
     <MapView style={{flex:1}} styleURL="mapbox://styles/mapbox/dark-v11">
