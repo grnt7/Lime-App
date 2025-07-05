@@ -49,6 +49,8 @@ export default function ScooterProvider({ children }: PropsWithChildren) {
     // Type useState calls with explicit null initial values
     const [selectedScooter, setSelectedScooter] = useState<Scooter | null>(null);
     const [direction, setDirection] = useState<DirectionResponse | null>(null);
+    const [isNearby, setIsNearby] = useState(false);
+
 
     useEffect(() => {
         const fetchDirectionsForSelectedScooter = async () => {
@@ -103,6 +105,7 @@ export default function ScooterProvider({ children }: PropsWithChildren) {
             directionCoordinates: direction?.routes?.[0]?.geometry.coordinates || null,
             duration: direction?.routes?.[0]?.duration || null,
             distance: direction?.routes?.[0]?.distance || null,
+           
         }}>
             {children}
         </ScooterContext.Provider>

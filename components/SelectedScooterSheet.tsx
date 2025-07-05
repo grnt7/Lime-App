@@ -7,7 +7,7 @@ import scooterImage from '~/assets/scooter.png'; // Adjust the path to your scoo
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 export default function SelectedScooterSheet() {
 
-    const { selectedScooter, duration, distance } = useScooter(); // Get the selected scooter from the context
+    const { selectedScooter, duration, distance, isNearby } = useScooter(); // Get the selected scooter from the context
     const bottomSheetRef = useRef<BottomSheet>(null); // Create a ref for the BottomSheet
 
 
@@ -27,7 +27,7 @@ export default function SelectedScooterSheet() {
         <BottomSheet
             ref={bottomSheetRef}
             index={selectedScooter ? 0 : -1} // Ensure it starts at snapPoint 0 when selected
-            snapPoints={[200, '50%']}
+            snapPoints={[200]}
             enablePanDownToClose
             backgroundStyle={{backgroundColor:"#414442"}}
         >
@@ -59,7 +59,7 @@ export default function SelectedScooterSheet() {
 
                 {/* Bottom Section: Button */}
                 <View style={styles.buttonWrapper}>
-                    <Button title="Start Journey"/>
+                    <Button title="Start Journey" disabled={!isNearby} />
                 </View>
             </BottomSheetView>
         </BottomSheet>
