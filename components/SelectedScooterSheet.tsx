@@ -5,60 +5,68 @@ import { Button } from "./Button";
 import { useScooter } from "~/providers/ScooterProvider";
 import scooterImage from '~/assets/scooter.png'; // Adjust the path to your scooter image
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+
 export default function SelectedScooterSheet() {
 
-    const { selectedScooter, duration, distance, isNearby } = useScooter(); // Get the selected scooter from the context
-    const bottomSheetRef = useRef<BottomSheet>(null); // Create a ref for the BottomSheet
+    // FIX 1: Destructure setSelectedScooter from useScooter()
+    const { selectedScooter, routeTime, routeDistance, isNearby, setSelectedScooter } = useScooter();
+    const bottomSheetRef = useRef<BottomSheet>(null);
 
+    // --- DEBUGGING LOGS (from previous suggestion) ---
+    console.log("SHEET RENDER: selectedScooter =", selectedScooter?.id);
+    console.log("SHEET RENDER: isNearby =", isNearby);
+    console.log("SHEET BUTTON: Button disabled state will be:", !isNearby);
+    // -------------------------------------------------
 
     useEffect(() => {
         if (selectedScooter) {
             bottomSheetRef.current?.expand(); // Expand the bottom sheet when a scooter is selected
+        } else {
+            bottomSheetRef.current?.close(); // Close the bottom sheet when no scooter is selected
         }
-    }, [selectedScooter]); // Log when selected scooter changes
-
+    }, [selectedScooter]);
 
     // CONDITIONAL RENDERING: Only render the BottomSheet if a scooter is selected
+    // FIX 2: Removed duplicate conditional render check
     if (!selectedScooter) {
-        return null; // Or return a loading indicator, or a "No scooter selected" message
+        return null;
     }
 
-     return (
+    return (
         <BottomSheet
             ref={bottomSheetRef}
-            index={selectedScooter ? 0 : -1} // Ensure it starts at snapPoint 0 when selected
+            // Ensure index is -1 when selectedScooter is null, so it starts closed
+            index={selectedScooter ? 0 : -1}
             snapPoints={[200]}
             enablePanDownToClose
             backgroundStyle={{backgroundColor:"#414442"}}
+            // Optional: Close sheet when dragging down and clear selected scooter
+            onClose={() => setSelectedScooter(null)} // This ensures selectedScooter is cleared if user closes sheet
         >
-            {/* The main content container for the BottomSheet */}
             <BottomSheetView style={styles.sheetContent}>
-
-                {/* This View holds the top section (image, text, metrics) */}
                 <View style={styles.headerContainer}>
                     <Image source={scooterImage} style={styles.scooterImage}/>
-
-                    {/* Text Details (Lime-S, ID) */}
                     <View style={styles.textContainer}>
                         <Text style={styles.scooterName}>Lime - S</Text>
                         <Text style={styles.scooterId}>id-{selectedScooter.id} . Madison Avenue</Text>
                     </View>
-
-                    {/* Metrics (Distance, Duration) */}
                     <View style={styles.metricsContainer}>
                         <View style={styles.metricItem}>
                             <FontAwesome6 name="person-walking" size={24} color="#42E100" />
-                            <Text style={styles.metricText}>{(distance/1000).toFixed(1)} km</Text>
+                            <Text style={styles.metricText}>
+                                {routeDistance !== null ? `${(routeDistance/1000).toFixed(1)} km` : 'N/A'}
+                            </Text>
                         </View>
                         <View style={styles.metricItem}>
                             <FontAwesome6 name="clock-four" size={24} color="#42E100" />
-                            <Text style={styles.metricText}>{(duration/60).toFixed(0)}min</Text>
+                            <Text style={styles.metricText}>
+                                {routeTime !== null ? `${(routeTime/60).toFixed(0)} min` : 'N/A'}
+                            </Text>
                         </View>
                     </View>
                 </View>
-
-                {/* Bottom Section: Button */}
                 <View style={styles.buttonWrapper}>
+                    {/* The disabled prop is correctly controlled by isNearby */}
                     <Button title="Start Journey" disabled={!isNearby} />
                 </View>
             </BottomSheetView>

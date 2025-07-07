@@ -57,7 +57,7 @@ export default function Map() {
 
 
  const startLocationCoordinates = [2.1734, 41.3851]; // Example coordinates for Barcelona
-const startPointFeature = point(startLocationCoordinates, { title: 'Start Location' });
+//const startPointFeature = point(startLocationCoordinates, { title: 'Start Location' });
 
  
 const onPointPress = async (event: MapboxTouchEvent) => {
@@ -78,7 +78,7 @@ const onPointPress = async (event: MapboxTouchEvent) => {
         <Images images={{ pin, locationicon }}/>
         <ShapeSource
           id="startLocationMarkerSource"
-          shape={featureCollection([startPointFeature])}
+          //shape={featureCollection([startPointFeature])}
       >
           <SymbolLayer
               id="location-icon"
