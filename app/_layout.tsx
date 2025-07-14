@@ -11,6 +11,7 @@ return (
     <ScooterProvider > {/* <-- Add this temporary 'key' prop */}
   <Stack />
   {/* <LocationTester />  */}
+ 
   <StatusBar style="light" />
   </ScooterProvider>
  </GestureHandlerRootView>
