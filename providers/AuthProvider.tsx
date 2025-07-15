@@ -4,7 +4,14 @@ import { createContext, PropsWithChildren, useContext, useEffect, useState } fro
 import { ActivityIndicator } from "react-native";
 import { supabase } from "~/lib/supabase";
 
-const AuthContext = createContext({});
+type AuthContextType = {
+  isAuthenticated: boolean; 
+  session?: Session | null;
+};
+
+const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+});
 
 export default function AuthProvider({ children }: PropsWithChildren) {
     const [session, setSession] = useState<Session | null>(null);

@@ -1,3 +1,4 @@
+import 'core-js/web/structured-clone'; // Add this line at the very top
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';

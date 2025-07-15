@@ -33,41 +33,58 @@ export default function Auth() {
   async function signInWithEmail() {
     setLoading(true);
     setMessage(''); // Clear previous messages
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
 
-    if (error) {
-      showMessage(error.message);
-    } else {
-      // On successful sign-in, navigate to the home screen
-      router.replace('/(home)'); // Use replace to prevent going back to login
+      if (error) {
+        console.error("Supabase Sign In Error:", error); // Log the full error object
+        showMessage(error.message);
+      } else {
+        console.log("Supabase Sign In Success. Redirecting to /(home).");
+        // On successful sign-in, navigate to the home screen
+        router.replace('/(home)'); // Use replace to prevent going back to login
+      }
+    } catch (err) {
+      console.error("Caught exception during Sign In:", err); // Catch unexpected exceptions
+      showMessage("An unexpected error occurred during sign in.");
+    } finally {
+      setLoading(false); // Ensure loading is always set to false
     }
-    setLoading(false);
   }
 
   async function signUpWithEmail() {
     setLoading(true);
     setMessage(''); // Clear previous messages
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
+    try {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      });
 
-    if (error) {
-      showMessage(error.message);
-    } else if (!session) {
-      // If no session but no error, it likely means email verification is required
-      showMessage('Please check your inbox for email verification!', 'success');
-    } else {
-      // On successful sign-up (and if email verification is not required or already done), navigate
-      router.replace('/(home)'); // Use replace to prevent going back to login
+      if (error) {
+        console.error("Supabase Sign Up Error:", error); // Log the full error object
+        showMessage(error.message);
+      } else if (!session) {
+        // If no session but no error, it likely means email verification is required
+        console.log("Supabase Sign Up Success: Email verification required.");
+        showMessage('Please check your inbox for email verification!', 'success');
+      } else {
+        console.log("Supabase Sign Up Success. Redirecting to /(home).");
+        // On successful sign-up (and if email verification is not required or already done), navigate
+        router.replace('/(home)'); // Use replace to prevent going back to login
+      }
+    } catch (err) {
+      console.error("Caught exception during Sign Up:", err); // Catch unexpected exceptions
+      showMessage("An unexpected error occurred during sign up.");
+    } finally {
+      setLoading(false); // Ensure loading is always set to false
     }
-    setLoading(false);
   }
 
   return (
