@@ -3,6 +3,7 @@ import * as Location from 'expo-location';
 import { getDirections } from '../services/directions';
 import getDistance from "@turf/distance";
 import { point } from "@turf/helpers";
+import { supabase } from '~/lib/supabase';
 
 // --- START: Interface Definitions (Crucial for TypeScript) ---
 interface Scooter {
@@ -42,9 +43,49 @@ interface ScooterContextType {
 const ScooterContext = createContext<ScooterContextType | undefined>(undefined);
 
 export default function ScooterProvider({ children }: PropsWithChildren) {
+  const [nearbyScooters, setNearbyScooters] = useState([]);
   const [selectedScooter, setSelectedScooter] = useState<Scooter | null>(null);
   const [direction, setDirection] = useState<DirectionResponse | null>(null);
   const [isNearby, setIsNearby] = useState(false);
+
+  useEffect(() => {
+  const fetchScooters = async () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        // ✅ Log the coordinates to confirm geolocation works
+        console.log("Got location:", latitude, longitude);
+
+        // Call your Supabase stored procedure with real coords
+        const { error, data } = await supabase.rpc('nearby_scooters', {
+          lat: latitude,
+          long: longitude,
+        });
+
+        if (error) {
+          console.error("Supabase RPC error:", error);
+          alert("Failed to fetch scooters: " + error.message);
+        } else {
+          console.log("Fetched scooters:", data);
+          setNearbyScooters(data);
+          setIsNearby(true);
+        }
+      },
+      (err) => {
+        console.error('Geolocation error:', err);
+        alert('Failed to get your location.');
+      }
+    );
+  };
+
+  fetchScooters();
+}, []);
 
   // Use a ref to hold the latest selectedScooter without re-running the effect
   const selectedScooterRef = useRef<Scooter | null>(selectedScooter);

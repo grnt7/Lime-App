@@ -11,7 +11,7 @@ return (
   
   <GestureHandlerRootView style={{ flex: 1 }}>
     <AuthProvider>
-    <ScooterProvider > {/* <-- Add this temporary 'key' prop */}
+    <ScooterProvider > 
   <Stack screenOptions={ {headerShown: false }}/>
   {/* <LocationTester />  */}
  
