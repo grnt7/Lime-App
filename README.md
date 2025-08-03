@@ -1,16 +1,16 @@
-This is an Uber Clone developed using Papafam Let's Build an Uber Clone with REACT NATIVE!(Navigation, Redux, TailwindCSS, Google Autocomplete and other Google Maps API's. Youtube tutorial.
+This is a Lime Clone App developed using notJustDev youTube tutorial with REACT NATIVE! Build an e-scooter rental app similar to Lime and Bird using React Native and Mapbox. Includes rendering scooters on the map to integrating directions and navigation features.  The backend for this e-scooter rental app was developed using Supabase, integrated with the React Native frontend. Implement authentication, set up a database, and create backend APIs to handle data and user interactions. 
 
 🚀 Live See the application live here: https://your-deployed-app-url.com
 
-✨ Features Key Feature 1: Fully responsive design ensures seamless experience across all devices. Key Feature 2: HomePage UI uses a stylish Dark Mode that transitions into light mode. An intuitive location Search bar with Google Places Autocomplete integrated for finding Places/ addresses. Key Feature 3: Navigate from Get A Ride to Mapscreen using Touchable Opacity. Destination Search Bar with GooglePlaces Autocomplete. On selection tansitions seamlessly to Ride Options Screen. Key Feature 4: Google Distance Matrix API ("Dynamic data fetching from an Google Maps API calculation of distance between two locations"). Key Feature 5: Price Calculation Rates set based on Vehicle Choice, UberX, UberXL, UberLux. Key Feature 6: Navigate back to homescreen using Hamburger Menu.
+✨ Features Key Feature 1: Fully responsive design ensures seamless experience across all devices. 
 
 🛠️ Technologies Used Frontend: React Native HTML5 Tailwind CSS or Styled Components JavaScript (ES6+)
 
-React Router Dom (for client-side routing) Redux for state management UI libraries: React Native Elements UI. Backend Google Maps API Platform: Node.js MongoDB (or PostgreSQL/MySQL/Firebase Firestore) To Be Followed Up Later
+React Router Dom (for client-side routing) Redux for state management UI libraries: React Native Elements UI. Backend Mapbox API Platform: Node.js, Supabase: Authentication, Scooter Locations, Ride Tracking.
 
 APIs Integrated:
 
-Google Maps Platform: Google Autocomplete, Google Directions API, Google Places API, Google Distance Matrix API Deployment: Netlify (or Vercel/Firebase Hosting/AWS Amplify): To Follow. Version Control: Git GitHub ⚙️ Installation & Local Setup Follow these steps to get a copy of the project running on your local machine for development and testing purposes.
+Mapbox: Netlify (or Vercel/Firebase Hosting/AWS Amplify): To Follow. Version Control: Git GitHub ⚙️ Installation & Local Setup Follow these steps to get a copy of the project running on your local machine for development and testing purposes.
 
 Clone the repository: Bash
 
