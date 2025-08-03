@@ -2,7 +2,11 @@ This is a Lime Clone App developed using notJustDev youTube tutorial with REACT 
 
 
 <img width="200" height="500" alt="Supabase Authentication" src="https://github.com/user-attachments/assets/b03cded5-31d2-4503-aaad-1c999dc64c34" />
+
 <img width="200" height="500" alt="Lime Mapscreen" src="https://github.com/user-attachments/assets/0bc72717-fd76-4076-b977-07a9abca7b48" />
+
+<img width="200" height="500" alt="Nearby Scooter Route" src="https://github.com/user-attachments/assets/70ea1239-deb6-473c-b9ed-82dcf33568dd" />
+
 
 
 🚀 Live See the application live here: https://your-deployed-app-url.com
