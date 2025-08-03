@@ -1,4 +1,6 @@
 This is a Lime Clone App developed using notJustDev youTube tutorial with REACT NATIVE! Build an e-scooter rental app similar to Lime and Bird using React Native and Mapbox. Includes rendering scooters on the map to integrating directions and navigation features.  The backend for this e-scooter rental app was developed using Supabase, integrated with the React Native frontend, implemented authentication, set up a database, and created backend APIs to handle data and user interactions. 
+<img width="978" height="2100" alt="Lime Start Journey BlackLime-portrait" src="https://github.com/user-attachments/assets/982a0636-a012-460f-81bd-3491e2f49ba4" />
+
 
 🚀 Live See the application live here: https://your-deployed-app-url.com
 
