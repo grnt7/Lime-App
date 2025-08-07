@@ -9,8 +9,9 @@ import { supabase } from '~/lib/supabase';
 interface Scooter {
   long: number;
   lat: number;
-  id?: string;
-  name?: string;
+  id?: number; // Changed to number based on Supabase return type
+  battery?: number; // Add battery
+  dist_meters?: number; // Add dist_meters
 }
 
 interface RouteGeometry {
@@ -37,55 +38,64 @@ interface ScooterContextType {
   routeTime: number | null;
   routeDistance: number | null;
   isNearby: boolean;
+  nearbyScooters: Scooter[]; // Added to expose nearby scooters
 }
 // --- END: Interface Definitions ---
 
 const ScooterContext = createContext<ScooterContextType | undefined>(undefined);
 
 export default function ScooterProvider({ children }: PropsWithChildren) {
-  const [nearbyScooters, setNearbyScooters] = useState([]);
+  const [nearbyScooters, setNearbyScooters] = useState<Scooter[]>([]); // Initialize with Scooter[]
   const [selectedScooter, setSelectedScooter] = useState<Scooter | null>(null);
   const [direction, setDirection] = useState<DirectionResponse | null>(null);
   const [isNearby, setIsNearby] = useState(false);
 
   useEffect(() => {
-  const fetchScooters = async () => {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        // ✅ Log the coordinates to confirm geolocation works
-        console.log("Got location:", latitude, longitude);
-
-        // Call your Supabase stored procedure with real coords
-        const { error, data } = await supabase.rpc('nearby_scooters', {
-          lat: latitude,
-          long: longitude,
-        });
-
-        if (error) {
-          console.error("Supabase RPC error:", error);
-          alert("Failed to fetch scooters: " + error.message);
-        } else {
-          console.log("Fetched scooters:", data);
-          setNearbyScooters(data);
-          setIsNearby(true);
-        }
-      },
-      (err) => {
-        console.error('Geolocation error:', err);
-        alert('Failed to get your location.');
+    const fetchScooters = async () => {
+      if (!navigator.geolocation) {
+        alert('Failed to fetch Scooters');
+        return;
       }
-    );
-  };
 
-  fetchScooters();
-}, []);
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          // ✅ Log the coordinates to confirm geolocation works
+          console.log("Got location:", latitude, longitude);
+
+          // IMPORTANT: Pass the actual latitude and longitude from the user's current position
+          // Your current code has `lat: 0, long: 0`, which is likely a placeholder.
+          const { error, data } = await supabase.rpc('nearby_scooters', {
+            lat: latitude, // Use actual user latitude
+            long: longitude, // Use actual user longitude
+          });
+
+          if (error) {
+            console.error("Supabase RPC error:", error);
+            alert("Failed to fetch scooters: " + error.message);
+          } else {
+            console.log("Supabase RPC data:", JSON.stringify(data, null, 2));
+
+            // Ensure the data is correctly typed before setting
+            // The `nearby_scooters` function returns a table with id, battery, lat, long, dist_meters
+            // Map the data to your Scooter interface if necessary, though it seems direct
+            setNearbyScooters(data as Scooter[]); // Cast the data to Scooter[]
+            setIsNearby(true);
+          }
+        },
+        (err) => {
+          console.error('Geolocation error:', err);
+          alert('Failed to get your location.');
+        }
+      );
+    };
+
+    fetchScooters();
+    // No dependencies here means it runs once on mount. If you want it to refetch
+    // on location changes, you'd need a more advanced strategy (e.g., watchPositionAsync).
+    // For now, keeping it consistent with your original structure.
+  }, []);
 
   // Use a ref to hold the latest selectedScooter without re-running the effect
   const selectedScooterRef = useRef<Scooter | null>(selectedScooter);
@@ -230,7 +240,8 @@ export default function ScooterProvider({ children }: PropsWithChildren) {
       directionCoordinates,
       routeTime,
       routeDistance,
-      isNearby, // Ensure this is included
+      isNearby,
+      nearbyScooters, // Expose nearbyScooters
     }}>
       {children}
     </ScooterContext.Provider>
@@ -245,3 +256,4 @@ export const useScooter = () => {
   }
   return context;
 };
+

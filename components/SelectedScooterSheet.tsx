@@ -1,16 +1,22 @@
 import BottomSheet, {BottomSheetView} from "@gorhom/bottom-sheet"
 import { useEffect, useRef } from "react";
-import { StyleSheet, Text, Image, View,} from "react-native"
+import { StyleSheet, Text, Image, View, Alert,} from "react-native"
 import { Button } from "./Button";
 import { useScooter } from "~/providers/ScooterProvider";
 import scooterImage from '~/assets/scooter.png'; // Adjust the path to your scooter image
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { supabase } from "~/lib/supabase";
+import { useAuth } from "~/providers/AuthProvider";
+import { useRide } from "~/providers/RideProvider";
 
 export default function SelectedScooterSheet() {
 
     // FIX 1: Destructure setSelectedScooter from useScooter()
     const { selectedScooter, routeTime, routeDistance, isNearby, setSelectedScooter } = useScooter();
     const bottomSheetRef = useRef<BottomSheet>(null);
+
+    const { startRide, ride } = useRide();
+   
 
     // --- DEBUGGING LOGS (from previous suggestion) ---
     console.log("SHEET RENDER: selectedScooter =", selectedScooter?.id);
@@ -31,6 +37,8 @@ export default function SelectedScooterSheet() {
     if (!selectedScooter) {
         return null;
     }
+
+
 
     return (
         <BottomSheet
@@ -67,7 +75,15 @@ export default function SelectedScooterSheet() {
                 </View>
                 <View style={styles.buttonWrapper}>
                     {/* The disabled prop is correctly controlled by isNearby */}
-                    <Button title="Start Journey" disabled={!isNearby} />
+                   <Button 
+  title="Start Journey" 
+  onPress={() => {
+    if (selectedScooter?.id) {
+      startRide(selectedScooter.id);
+    }
+  }} 
+  disabled={!isNearby} 
+/>
                 </View>
             </BottomSheetView>
         </BottomSheet>

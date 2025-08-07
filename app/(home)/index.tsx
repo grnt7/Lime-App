@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import SelectedScooterSheet from '~/components/SelectedScooterSheet';
 // REMOVED: import { Button } from '@rneui/themed'; // This line is removed
 import { supabase } from '~/lib/supabase';
+import ActiveRideSheet from '~/components/ActiveRideSheet';
 
 export default function Home() {
   // The Redirect to /auth is handled by app/(home)/_layout.tsx
@@ -31,6 +32,7 @@ export default function Home() {
           <Text style={styles.signOutButtonText}>Sign out</Text>
         </TouchableOpacity>
         <SelectedScooterSheet />
+        <ActiveRideSheet />
       </View>
       <StatusBar style="dark" /> {/* Assuming dark content on a light background for status bar */}
     </>
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
     position: 'absolute', // Position it absolutely
     top: 50, // Adjust top spacing as needed
     right: 20, // Adjust right spacing as needed
-    backgroundColor: '#FF6347', // A distinct color for sign out
+    backgroundColor: '#42E100', // A distinct color for sign out
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 8,
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   signOutButtonText: {
-    color: 'white',
+    color: 'black', // Changed to black for better contrast
     fontSize: 16,
     fontWeight: 'bold',
   },

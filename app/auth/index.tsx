@@ -181,27 +181,33 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    //borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
     backgroundColor: '#fff', // White background for input
+    borderColor: '#22c55e', // The green-500 color
+    borderStyle: 'solid',
   },
-  button: {
-    backgroundColor: '#007AFF', // Blue color for buttons
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 45, // Ensure consistent height
-  },
+ button: {
+  //backgroundColor: '#007AFF', // Blue color for buttons
+  backgroundColor: '#22c55e',// The green-500 color to match Lime-App clone Branding
+  paddingVertical: 12,
+  paddingHorizontal: 20,
+  borderRadius: 8,
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 45, // Ensure consistent height
+  borderWidth: 2, // You can adjust the width as needed
+  borderColor: '#22c55e', // The green-500 color
+  borderStyle: 'solid',
+},
   buttonDisabled: {
     backgroundColor: '#A0A0A0', // Grey for disabled state
   },
   buttonText: {
-    color: 'white',
+    color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
   },
