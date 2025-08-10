@@ -1,6 +1,6 @@
 import BottomSheet, {BottomSheetView} from "@gorhom/bottom-sheet"
 import { useEffect, useRef } from "react";
-import { StyleSheet, Text, Image, View, Alert,} from "react-native"
+import { StyleSheet, Text, Image, View, Alert, TouchableOpacity,} from "react-native"
 import { Button } from "./Button";
 import { useScooter } from "~/providers/ScooterProvider";
 import scooterImage from '~/assets/scooter.png'; // Adjust the path to your scooter image
@@ -13,15 +13,16 @@ export default function SelectedScooterSheet() {
 
     // FIX 1: Destructure setSelectedScooter from useScooter()
     const { selectedScooter, routeTime, routeDistance, isNearby, setSelectedScooter } = useScooter();
+    const isDisabled = !selectedScooter || !isNearby;
     const bottomSheetRef = useRef<BottomSheet>(null);
 
     const { startRide, ride } = useRide();
    
 
     // --- DEBUGGING LOGS (from previous suggestion) ---
-    console.log("SHEET RENDER: selectedScooter =", selectedScooter?.id);
-    console.log("SHEET RENDER: isNearby =", isNearby);
-    console.log("SHEET BUTTON: Button disabled state will be:", !isNearby);
+   //console.log("SHEET RENDER: selectedScooter =", selectedScooter?.id);
+    //console.log("SHEET RENDER: isNearby =", isNearby);
+    //console.log("SHEET BUTTON: Button disabled state will be:", !isNearby);
     // -------------------------------------------------
 
     useEffect(() => {
@@ -52,7 +53,12 @@ export default function SelectedScooterSheet() {
             onClose={() => setSelectedScooter(null)} // This ensures selectedScooter is cleared if user closes sheet
         >
             <BottomSheetView style={styles.sheetContent}>
+                  <TouchableOpacity onPress={() => setSelectedScooter(null)} style={styles.closeButton}>
+                        <FontAwesome6 name="xmark" size={24} color="#FFFFFF" />
+                    </TouchableOpacity>
                 <View style={styles.headerContainer}>
+                    {/* ✅ ADDED CLOSE BUTTON */}
+                  
                     <Image source={scooterImage} style={styles.scooterImage}/>
                     <View style={styles.textContainer}>
                         <Text style={styles.scooterName}>Lime - S</Text>
@@ -73,18 +79,20 @@ export default function SelectedScooterSheet() {
                         </View>
                     </View>
                 </View>
-                <View style={styles.buttonWrapper}>
-                    {/* The disabled prop is correctly controlled by isNearby */}
-                   <Button 
-  title="Start Journey" 
-  onPress={() => {
-    if (selectedScooter?.id) {
-      startRide(selectedScooter.id);
-    }
-  }} 
-  disabled={!isNearby} 
-/>
-                </View>
+<View style={styles.buttonWrapper}>
+    {/* Only render the "Start Journey" button if a ride is NOT active */}
+    {!ride && (
+        <Button 
+            title="Start Journey" 
+            onPress={() => {
+                if (selectedScooter?.id) {
+                    startRide(selectedScooter.id);
+                }
+            }} 
+            disabled={!isNearby} 
+        />
+    )}
+</View>
             </BottomSheetView>
         </BottomSheet>
     )
@@ -118,12 +126,12 @@ const styles = StyleSheet.create({
         flex: 1, // Allows this text section to take up available space in the middle
     },
     scooterName: {
-        color: "white",
+        color: "#ffff",
         fontSize: 20,
         fontWeight: "600"
     },
     scooterId: {
-        color: "white",
+        color: "#ffff",
         fontSize: 18,
     },
     // Style for the container of distance and duration metrics

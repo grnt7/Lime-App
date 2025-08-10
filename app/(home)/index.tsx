@@ -1,6 +1,6 @@
 import { Stack, Link, Redirect } from 'expo-router';
 import { Text, View, StyleSheet, Button, TouchableOpacity } from 'react-native'; // Added Button and TouchableOpacity for styling
-
+import { useRide } from '~/providers/RideProvider';
 import Map from "~/components/Map";
 
 import { StatusBar } from 'expo-status-bar';
@@ -12,7 +12,7 @@ import ActiveRideSheet from '~/components/ActiveRideSheet';
 export default function Home() {
   // The Redirect to /auth is handled by app/(home)/_layout.tsx
   // This component will only render if the user is authenticated.
-
+ const { ride } = useRide();
   async function handleSignOut() {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -32,7 +32,7 @@ export default function Home() {
           <Text style={styles.signOutButtonText}>Sign out</Text>
         </TouchableOpacity>
         <SelectedScooterSheet />
-        <ActiveRideSheet />
+         {ride ? <ActiveRideSheet /> : <SelectedScooterSheet />}
       </View>
       <StatusBar style="dark" /> {/* Assuming dark content on a light background for status bar */}
     </>

@@ -10,18 +10,27 @@ import RideProvider from '~/providers/RideProvider';
 export default function Layout() {
 return (
   
-  <GestureHandlerRootView style={{ flex: 1 }}>
+  /*<GestureHandlerRootView style={{ flex: 1 }}>
     <AuthProvider>
     <ScooterProvider > 
        <RideProvider>
   <Stack screenOptions={ {headerShown: false }}/>
-  {/* <LocationTester />  */}
     </RideProvider>
   
   <StatusBar style="light" />
   </ScooterProvider>
   </AuthProvider>
  </GestureHandlerRootView>
-  
+  */
+   <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <RideProvider>
+          <ScooterProvider>
+            <Stack screenOptions={{ headerShown: false }} />
+          </ScooterProvider>
+        </RideProvider>
+      </AuthProvider>
+      <StatusBar style="light" />
+    </GestureHandlerRootView>
 );
 }
