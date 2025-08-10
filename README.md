@@ -11,6 +11,9 @@ This is a Lime Clone App developed using notJustDev youTube tutorial with REACT 
 
 <img width="200" height="500" alt="Nearby Scooter Route" src="https://github.com/user-attachments/assets/70ea1239-deb6-473c-b9ed-82dcf33568dd" />
 
+<img width="200" height="500" alt="Finsh-Journey Button" src="https://github.com/user-attachments/assets/fe727184-12a0-4ffd-a9f1-ec4fea3cab5e" />
+
+
 
 
 🚀 Live See the application live here: https://your-deployed-app-url.com
